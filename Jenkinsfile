@@ -32,7 +32,7 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'siriwan101', passwordVariable: 'Nongmook_101')]) {
                     sh '''
                         docker build -t $DOCKER_IMAGE .
                         echo $PASS | docker login -u $USER --password-stdin
