@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Nongmook101/springboot-ci-cd-demo.git'
+                git 'https://github.com/Nongmook101/ci-cd-app'
             }
         }
 
