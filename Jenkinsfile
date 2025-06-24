@@ -32,15 +32,16 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'siriwan101', passwordVariable: 'Nongmook_101')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         docker build -t $DOCKER_IMAGE .
-                        echo $PASS | docker login -u $USER --password-stdin
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push $DOCKER_IMAGE
                     '''
                 }
             }
         }
+
 
         stage('Deploy to Kubernetes') {
             steps {
