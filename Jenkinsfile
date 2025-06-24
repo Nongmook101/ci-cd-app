@@ -13,9 +13,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'SCM Checkout will be handled automatically'
+                git branch: 'main', url: 'https://github.com/Nongmook101/ci-cd-app'
             }
         }
+
 
         stage('Build') {
             steps {
