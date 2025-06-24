@@ -1,55 +1,49 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK-17'
+        maven 'Maven 3'
+    }
+
     environment {
-        IMAGE_NAME = "siriwan101/springboot-ci-cd-demo"
+        DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
     }
 
     stages {
-        stage('Git Checkout') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/siriwan101/springboot-ci-cd-demo.git'
+                git 'https://github.com/Nongmook101/springboot-ci-cd-demo.git'
             }
         }
 
-        stage('Build & Unit Test') {
+        stage('Build') {
             steps {
                 sh 'mvn clean install'
             }
         }
 
-        stage('Quality Scan - SonarQube') {
-            environment {
-                SONAR_SCANNER_HOME = tool 'SonarScanner'
-            }
+        stage('Test') {
             steps {
-                withSonarQubeEnv('MySonarServer') {
-                    sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner"
+                sh 'mvn test'
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                        docker build -t $DOCKER_IMAGE .
+                        echo $PASS | docker login -u $USER --password-stdin
+                        docker push $DOCKER_IMAGE
+                    '''
                 }
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh "docker build -t $IMAGE_NAME ."
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push $IMAGE_NAME
-                    """
-                }
-            }
-        }
-
-        // Optional
         stage('Deploy to Kubernetes') {
             steps {
-                echo 'Deploy to Kubernetes cluster here (e.g., kubectl apply -f k8s.yaml)'
+                sh 'kubectl apply -f k8s/'
             }
         }
     }
