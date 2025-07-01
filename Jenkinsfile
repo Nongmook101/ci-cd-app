@@ -59,6 +59,25 @@ pipeline {
                 }
             }
         }
+         stage('Install Helm') {
+             steps {
+                 sh '''
+                 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+                 '''
+             }
+         }
+
+         stage('Helm Deploy') {
+             steps {
+                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                     sh '''
+                     helm upgrade --install springboot-ci-demo ./helm \
+                         --set image.repository=$DOCKER_IMAGE \
+                         --set image.tag=latest
+                     '''
+                 }
+             }
+         }
 
         stage('Install kubectl') {
             steps {
