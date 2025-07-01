@@ -7,8 +7,10 @@ pipeline {
     }
 
     environment {
-        DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
+        IMAGE_TAG = "v2"
+        DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
     }
+
 
     stages {
         stage('Checkout') {
@@ -47,7 +49,6 @@ pipeline {
             }
         }
 
-
         stage('Docker Build & Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
@@ -72,8 +73,8 @@ pipeline {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                      sh '''
                      helm upgrade --install springboot-ci-demo ./helm \
-                         --set image.repository=$DOCKER_IMAGE \
-                         --set image.tag=latest
+                         --set image.repository=siriwan101/springboot-ci-demo \
+                         --set image.tag=$IMAGE_TAG
                      '''
                  }
              }
