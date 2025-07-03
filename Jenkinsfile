@@ -7,9 +7,9 @@ pipeline {
     }
 
     environment {
-//         DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
-        IMAGE_TAG = "v2"
-        DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
+        DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
+//         IMAGE_TAG = "v2"
+//         DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
     }
 
 
@@ -74,8 +74,8 @@ pipeline {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                      sh '''
                      helm upgrade --install springboot-ci-demo ./helm \
-                         --set image.repository=siriwan101/springboot-ci-demo \
-                         --set image.tag=$IMAGE_TAG
+                        --set image.repository=$DOCKER_IMAGE \
+                        --set image.tag=latest
                      '''
                  }
              }
@@ -95,25 +95,25 @@ pipeline {
 //                       }
 //                   }
 
-         stage('Update Helm values.yaml and Commit') {
-             steps {
-                 withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                     sh '''
-                         git config --global user.email "ci@example.com"
-                         git config --global user.name "jenkins-bot"
-
-                         git clone https://$GIT_USER:$GIT_PASS@github.com/Nongmook101/ci-cd-app.git
-                         cd ci-cd-app
-
-                         sed -i 's/tag: .*/tag: v2/' helm/values.yaml
-
-                         git add helm/values.yaml
-                         git commit -m "Jenkins updated tag to v2"
-                         git push
-                     '''
-                 }
-             }
-         }
+//          stage('Update Helm values.yaml and Commit') {
+//              steps {
+//                  withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+//                      sh '''
+//                          git config --global user.email "ci@example.com"
+//                          git config --global user.name "jenkins-bot"
+//
+//                          git clone https://$GIT_USER:$GIT_PASS@github.com/Nongmook101/ci-cd-app.git
+//                          cd ci-cd-app
+//
+//                          sed -i 's/tag: .*/tag: v2/' helm/values.yaml
+//
+//                          git add helm/values.yaml
+//                          git commit -m "Jenkins updated tag to v2"
+//                          git push
+//                      '''
+//                  }
+//              }
+//          }
 
 
         stage('Install kubectl') {
