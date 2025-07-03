@@ -95,25 +95,25 @@ pipeline {
 //                       }
 //                   }
 
-//          stage('Update Helm values.yaml and Commit') {
-//              steps {
-//                  withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-//                      sh '''
-//                          git config --global user.email "ci@example.com"
-//                          git config --global user.name "jenkins-bot"
-//
-//                          git clone https://$GIT_USER:$GIT_PASS@github.com/Nongmook101/ci-cd-app.git
-//                          cd ci-cd-app
-//
-//                          sed -i 's/tag: .*/tag: v2/' helm/values.yaml
-//
-//                          git add helm/values.yaml
-//                          git commit -m "Jenkins updated tag to v2"
-//                          git push
-//                      '''
-//                  }
-//              }
-//          }
+         stage('Update Helm values.yaml and Commit') {
+             steps {
+                 withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                     sh '''
+                         git config --global user.email "ci@example.com"
+                         git config --global user.name "jenkins-bot"
+
+                         git clone https://$GIT_USER:$GIT_PASS@github.com/Nongmook101/ci-cd-app.git
+                         cd ci-cd-app
+
+                         sed -i 's/tag: .*/tag: v2/' helm/values.yaml
+
+                         git add helm/values.yaml
+                         git commit -m "Jenkins updated tag to v2"
+                         git push
+                     '''
+                 }
+             }
+         }
 
 
         stage('Install kubectl') {
