@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: siriwan101/springboot-ci-demo
-  tag: ${IMAGE_TAG}
+  tag: v1.0.57
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
