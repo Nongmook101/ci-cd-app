@@ -7,9 +7,9 @@ pipeline {
     }
 
     environment {
-        DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
-//         IMAGE_TAG = "v2"
-//         DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
+//         DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
+        IMAGE_TAG = "v2"
+        DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
     }
 
 
@@ -74,8 +74,8 @@ pipeline {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                      sh '''
                      helm upgrade --install springboot-ci-demo ./helm \
-                        --set image.repository=$DOCKER_IMAGE \
-                        --set image.tag=latest
+                        --set image.repository=siriwan101/springboot-ci-demo \
+                        --set image.tag=$IMAGE_TAG
                      '''
                  }
              }
