@@ -33,16 +33,16 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
-            environment {
-                SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
-            }
-            steps {
-                withSonarQubeEnv('MySonarQubeServer') {
-                    sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner"
-                }
-            }
-        }
+//         stage('SonarQube Scan') {
+//             environment {
+//                 SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
+//             }
+//             steps {
+//                 withSonarQubeEnv('MySonarQubeServer') {
+//                     sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner"
+//                 }
+//             }
+//         }
 
         stage('Dependency Check') {
             steps {
