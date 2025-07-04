@@ -7,9 +7,10 @@ pipeline {
     }
 
     environment {
-//         DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
-        IMAGE_TAG = "v2"
-        DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
+        DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
+        IMAGE_TAG = "v1.0.${BUILD_NUMBER}"
+//         IMAGE_TAG = "v2"
+//         DOCKER_IMAGE = "siriwan101/springboot-ci-demo:${IMAGE_TAG}"
     }
 
 
@@ -73,9 +74,13 @@ pipeline {
              steps {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                      sh '''
-                     helm upgrade --install springboot-ci-demo ./helm \
-                        --set image.repository=siriwan101/springboot-ci-demo \
-                        --set image.tag=$IMAGE_TAG
+                     yq eval '.image.tag = "${IMAGE_TAG}"' -i values.yaml
+
+                     git config user.email "jenkins@ci.com"
+                     git config user.name "Jenkin"
+                     git commit -m "update image"
+
+                     git push https://${GIT_USER}:${GIT_PASS}@github.com/Nongmook101/ci-cd-app
                      '''
                  }
              }
