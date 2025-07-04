@@ -1,12 +1,9 @@
 replicaCount: 1
-
 image:
   repository: siriwan101/springboot-ci-demo
-  tag: latest
+  tag: ${IMAGE_TAG}
   pullPolicy: IfNotPresent
-
 service:
   type: ClusterIP
   port: 8080
-
 resources: {}
