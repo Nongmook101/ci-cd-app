@@ -72,19 +72,27 @@ pipeline {
 
          stage('Helm Deploy') {
              steps {
-                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG'),
+                                  usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                      sh '''
-                     yq eval '.image.tag = "${IMAGE_TAG}"' -i values.yaml
+                     # ติดตั้ง yq
+                     wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+                     chmod +x /usr/local/bin/yq
+
+                     # แก้ไขค่า tag ใน values.yaml
+                     yq eval '.image.tag = "${IMAGE_TAG}"' -i helm/values.yaml
 
                      git config user.email "jenkins@ci.com"
-                     git config user.name "Jenkin"
-                     git commit -m "update image"
+                     git config user.name "jenkins-bot"
 
-                     git push https://${GIT_USER}:${GIT_PASS}@github.com/Nongmook101/ci-cd-app
+                     git add helm/values.yaml
+                     git commit -m "Jenkins updated tag to ${IMAGE_TAG}" || echo "No changes to commit"
+                     git push https://${GIT_USER}:${GIT_PASS}@github.com/Nongmook101/ci-cd-app.git
                      '''
                  }
              }
          }
+
 
 //          stage('Helm Deploy') {
 //                       steps {
