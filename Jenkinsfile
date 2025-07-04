@@ -7,6 +7,8 @@ pipeline {
     }
 
     environment {
+        REGISTRY = 'docker.io/Siriwan101'
+        IMAGE_NAME = 'springboot-ci-demo'
         DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
         IMAGE_TAG = "v1.0.${BUILD_NUMBER}"
 //         IMAGE_TAG = "v2"
@@ -53,11 +55,14 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
+                sh "docker build -t $REGISTRY/$IMAGE_NAME:$IMAGE_TAG ."
+            }
+            steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         docker build -t $DOCKER_IMAGE .
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_IMAGE
+                        docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
                     '''
                 }
             }
