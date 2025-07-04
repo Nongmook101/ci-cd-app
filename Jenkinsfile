@@ -75,11 +75,9 @@ pipeline {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG'),
                                   usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                      sh '''
-                     # ติดตั้ง yq
                      wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
                      chmod +x /usr/local/bin/yq
 
-                     # แก้ไขค่า tag ใน values.yaml
                      yq eval '.image.tag = "${IMAGE_TAG}"' -i helm/values.yaml
 
                      git config user.email "jenkins@ci.com"
@@ -129,23 +127,23 @@ pipeline {
 //          }
 
 
-        stage('Install kubectl') {
-            steps {
-                sh '''
-                curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                chmod +x kubectl
-                mv kubectl /usr/local/bin/
-                '''
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh 'kubectl apply -f k8s/'
-                }
-            }
-        }
-
-    }
+//         stage('Install kubectl') {
+//             steps {
+//                 sh '''
+//                 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+//                 chmod +x kubectl
+//                 mv kubectl /usr/local/bin/
+//                 '''
+//             }
+//         }
+//
+//         stage('Deploy to Kubernetes') {
+//             steps {
+//                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+//                     sh 'kubectl apply -f k8s/'
+//                 }
+//             }
+//         }
+//
+//     }
 }
