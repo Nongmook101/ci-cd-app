@@ -85,7 +85,7 @@ pipeline {
 
                      git add helm/values.yaml
                      git commit -m "Jenkins updated tag to ${IMAGE_TAG}" || echo "No changes to commit"
-                     git push https://${GIT_USER}:${GIT_PASS}@github.com/Nongmook101/ci-cd-app.git
+                     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Nongmook101/ci-cd-app.git
                      '''
                  }
              }
