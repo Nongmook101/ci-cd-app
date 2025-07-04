@@ -55,9 +55,7 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {
-                sh "docker build -t $REGISTRY/$IMAGE_NAME:$IMAGE_TAG ."
-            }
-            steps {
+                 sh "docker build -t $REGISTRY/$IMAGE_NAME:$IMAGE_TAG ."
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         docker build -t $DOCKER_IMAGE .
