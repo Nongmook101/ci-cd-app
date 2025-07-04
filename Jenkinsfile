@@ -69,17 +69,17 @@ pipeline {
              }
          }
 
-         stage('Helm Deploy') {
-             steps {
-                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                     sh '''
-                     helm upgrade --install springboot-ci-demo ./helm \
-                        --set image.repository=$DOCKER_IMAGE \
-                        --set image.tag=latest
-                     '''
-                 }
-             }
-         }
+//          stage('Helm Deploy') {
+//              steps {
+//                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+//                      sh '''
+//                      helm upgrade --install springboot-ci-demo ./helm \
+//                         --set image.repository=$DOCKER_IMAGE \
+//                         --set image.tag=latest
+//                      '''
+//                  }
+//              }
+//          }
 
 //          stage('Helm Deploy') {
 //                       steps {
