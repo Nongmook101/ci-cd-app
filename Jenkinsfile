@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        REGISTRY = 'docker.io/Siriwan101'
+        REGISTRY = 'docker.io/siriwan101'
         IMAGE_NAME = 'springboot-ci-demo'
         DOCKER_IMAGE = "siriwan101/springboot-ci-demo"
         IMAGE_TAG = "v1.0.${BUILD_NUMBER}"
