@@ -73,7 +73,7 @@ pipeline {
          stage('Helm Deploy') {
              steps {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG'),
-                                  usernamePassword(credentialsId: 'github', usernameVariable: '{GIT_USERNAME}', passwordVariable: 'GIT_PASSWORD')]) {
+                                  usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                      sh '''
                      wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
                      chmod +x /usr/local/bin/yq
