@@ -79,7 +79,7 @@ pipeline {
              steps {
                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG'),
                                   usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                     sh '''
+                     sh """
                      wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
                      chmod +x /usr/local/bin/yq
 
@@ -91,7 +91,7 @@ pipeline {
                      git add helm/values.yaml
                      git commit -m "Jenkins updated tag to ${IMAGE_TAG}" || echo "No changes to commit"
                      git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Nongmook101/ci-cd-app.git
-                     '''
+                     """
                  }
              }
          }
