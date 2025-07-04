@@ -8,6 +8,6 @@ public class DemoApplicationTests {
     void testHello() {
         HelloController controller = new HelloController();
         String response = controller.hello();
-        assertEquals("hello ci/cd", response);
+        assertEquals("hello world", response);
     }
 }
